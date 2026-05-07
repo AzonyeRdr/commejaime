@@ -25,7 +25,7 @@ class AuthController extends BaseController
         $newUser = [
             'email' => $email,
             'mdp' => $mdp,
-            'roleId' => $roleUser,
+            'roleId' => $roleUser['id'] ?? 3,
             'montant' => 0,
         ];
 
@@ -37,15 +37,15 @@ class AuthController extends BaseController
         }
 
         if ($errors !== []) {
-            redirect()->to(site_url('inscriptionForm'))->with('errors', $errors);
+            return redirect()->to(site_url('/'))->with('errors', $errors);
         } else {
             session()->set('user', [
-                'id' => $newUser['id'],
+                'id' => $modelUser->getInsertID(),
                 'email' => $newUser['email'],
-                'role' => $newUser['role'],
+                'roleId' => $newUser['roleId'],
                 'montant' => $newUser['montant'],
             ]);
-            redirect()->to(site_url('inscriptionForm'))->with('success', 'Votre inscription a réussi.');
+            return redirect()->to(site_url('/'))->with('success', 'Votre inscription a réussi.');
         }
     }
 }
