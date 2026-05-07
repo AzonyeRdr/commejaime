@@ -13,16 +13,18 @@
         <form action="/" method="post">
             <div class="champ">
                 <div class="champ-item">
-                    <input type="email" name="email">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email" placeholder="user@gmail.com">
                 </div>
                 <div class="error">
-                    <?= $errors['email'] ?>
+                    <?= $errors['email'] ?? '' ?>
                 </div>
                 <div class="champ-item">
-                    <input type="password" name="mdp">
+                    <label for="mdp">Mot de passe</label>
+                    <input type="password" name="mdp" id="mdp">
                 </div>
                 <div class="error">
-                    <?= $errors['mdp'] ?>
+                    <?= $errors['mdp'] ?? '' ?>
                 </div>
             </div>
             <div class="btn">
