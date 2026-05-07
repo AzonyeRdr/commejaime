@@ -84,3 +84,11 @@ ALTER TABLE
     `avantage` ADD CONSTRAINT `avantage_roleid_foreign` FOREIGN KEY(`roleId`) REFERENCES `role`(`id`);
 ALTER TABLE
     `programmeSport` ADD CONSTRAINT `programmesport_sportid_foreign` FOREIGN KEY(`sportid`) REFERENCES `sport`(`id`);
+CREATE TABLE `inscriptionProgramme` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `userId` INT UNSIGNED NOT NULL,
+    `programmeId` INT UNSIGNED NOT NULL,
+    `dateInscription` DATE,
+    Foreign Key (userId) REFERENCES `user`(id),
+    Foreign Key (programmeId) REFERENCES programme(id)
+);
