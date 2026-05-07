@@ -12,7 +12,7 @@ class AuthController extends BaseController
         return view('auth/signUp', $errors);
     }
 
-    public function inscription()
+    public function inscrire()
     {
         $modelUser = new User();
         $modelRole = new Role();
