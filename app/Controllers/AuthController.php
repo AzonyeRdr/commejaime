@@ -7,9 +7,9 @@ use App\Models\User;
 
 class AuthController extends BaseController
 {
-    public function inscriptionForm($errors = [])
+    public function inscriptionForm()
     {
-        return view('auth/signUp', $errors);
+        return view('auth/signUp');
     }
 
     public function inscrire()
