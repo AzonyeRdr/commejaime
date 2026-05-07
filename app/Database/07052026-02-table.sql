@@ -1,8 +1,9 @@
+-- Active: 1770031521814@@127.0.0.1@3306@commejaime
 CREATE TABLE `user`(
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `email` TEXT NOT NULL,
     `mdp` TEXT NOT NULL,
-    `roleId` INT NOT NULL,
+    `roleId` INT UNSIGNED NOT NULL,
     `montant` DECIMAL(8, 2) NOT NULL DEFAULT 0
 );
 CREATE TABLE `role`(
@@ -21,14 +22,14 @@ CREATE TABLE `regime`(
 CREATE TABLE `programme`(
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `nom` TEXT NOT NULL,
-    `objId` INT NOT NULL,
+    `objId` INT UNSIGNED NOT NULL,
     `nombreJour` INT NOT NULL,
     `poids` DECIMAL(8, 2) NOT NULL
 );
 CREATE TABLE `progammeRegime`(
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `programmeId` INT NOT NULL,
-    `regimeId` INT NOT NULL,
+    `programmeId` INT UNSIGNED NOT NULL,
+    `regimeId` INT UNSIGNED NOT NULL,
     `jour` INT NOT NULL
 );
 CREATE TABLE `sport`(
@@ -37,8 +38,8 @@ CREATE TABLE `sport`(
 );
 CREATE TABLE `programmeSport`(
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `programmeId` INT NOT NULL,
-    `sportid` INT NOT NULL,
+    `programmeId` INT UNSIGNED NOT NULL,
+    `sportid` INT UNSIGNED NOT NULL,
     `jour` INT NOT NULL
 );
 CREATE TABLE `ingredients`(
@@ -48,20 +49,20 @@ CREATE TABLE `ingredients`(
 );
 CREATE TABLE `ingredientRegime`(
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `regimeId` INT NOT NULL,
-    `ingredientId` INT NOT NULL,
+    `regimeId` INT UNSIGNED NOT NULL,
+    `ingredientId` INT UNSIGNED NOT NULL,
     `pourcentage` DOUBLE NOT NULL
 );
 CREATE TABLE `avantage`(
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `roleId` INT NOT NULL,
+    `roleId` INT UNSIGNED NOT NULL,
     `reduction` DECIMAL(8, 2) NOT NULL
 );
 CREATE TABLE `code`(
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `lib` TEXT NOT NULL,
     `status` BOOLEAN NOT NULL,
-    `userid` INT NOT NULL
+    `userid` INT UNSIGNED NOT NULL
 );
 ALTER TABLE
     `ingredientRegime` ADD CONSTRAINT `ingredientregime_regimeid_foreign` FOREIGN KEY(`regimeId`) REFERENCES `regime`(`id`);
