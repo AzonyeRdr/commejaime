@@ -1,0 +1,85 @@
+CREATE TABLE `user`(
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `email` TEXT NOT NULL,
+    `mdp` TEXT NOT NULL,
+    `roleId` INT NOT NULL,
+    `montant` DECIMAL(8, 2) NOT NULL DEFAULT 0
+);
+CREATE TABLE `role`(
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `lib` TEXT NOT NULL
+);
+CREATE TABLE `objectif`(
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `lib` TEXT NOT NULL
+);
+CREATE TABLE `regime`(
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `nomPlat` TEXT NOT NULL,
+    `poidsTotalPlat` DOUBLE NOT NULL
+);
+CREATE TABLE `programme`(
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `nom` TEXT NOT NULL,
+    `objId` INT NOT NULL,
+    `nombreJour` INT NOT NULL,
+    `poids` DECIMAL(8, 2) NOT NULL
+);
+CREATE TABLE `progammeRegime`(
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `programmeId` INT NOT NULL,
+    `regimeId` INT NOT NULL,
+    `jour` INT NOT NULL
+);
+CREATE TABLE `sport`(
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `exercices` TEXT NOT NULL
+);
+CREATE TABLE `programmeSport`(
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `programmeId` INT NOT NULL,
+    `sportid` INT NOT NULL,
+    `jour` INT NOT NULL
+);
+CREATE TABLE `ingredients`(
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `lib` TEXT NOT NULL,
+    `prixG` DOUBLE NOT NULL
+);
+CREATE TABLE `ingredientRegime`(
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `regimeId` INT NOT NULL,
+    `ingredientId` INT NOT NULL,
+    `pourcentage` DOUBLE NOT NULL
+);
+CREATE TABLE `avantage`(
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `roleId` INT NOT NULL,
+    `reduction` DECIMAL(8, 2) NOT NULL
+);
+CREATE TABLE `code`(
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `lib` TEXT NOT NULL,
+    `status` BOOLEAN NOT NULL,
+    `userid` INT NOT NULL
+);
+ALTER TABLE
+    `ingredientRegime` ADD CONSTRAINT `ingredientregime_regimeid_foreign` FOREIGN KEY(`regimeId`) REFERENCES `regime`(`id`);
+ALTER TABLE
+    `progammeRegime` ADD CONSTRAINT `progammeregime_programmeid_foreign` FOREIGN KEY(`programmeId`) REFERENCES `programme`(`id`);
+ALTER TABLE
+    `programmeSport` ADD CONSTRAINT `programmesport_programmeid_foreign` FOREIGN KEY(`programmeId`) REFERENCES `programme`(`id`);
+ALTER TABLE
+    `code` ADD CONSTRAINT `code_userid_foreign` FOREIGN KEY(`userid`) REFERENCES `user`(`id`);
+ALTER TABLE
+    `user` ADD CONSTRAINT `user_roleid_foreign` FOREIGN KEY(`roleId`) REFERENCES `role`(`id`);
+ALTER TABLE
+    `programme` ADD CONSTRAINT `programme_objid_foreign` FOREIGN KEY(`objId`) REFERENCES `objectif`(`id`);
+ALTER TABLE
+    `progammeRegime` ADD CONSTRAINT `progammeregime_regimeid_foreign` FOREIGN KEY(`regimeId`) REFERENCES `regime`(`id`);
+ALTER TABLE
+    `ingredientRegime` ADD CONSTRAINT `ingredientregime_ingredientid_foreign` FOREIGN KEY(`ingredientId`) REFERENCES `ingredients`(`id`);
+ALTER TABLE
+    `avantage` ADD CONSTRAINT `avantage_roleid_foreign` FOREIGN KEY(`roleId`) REFERENCES `role`(`id`);
+ALTER TABLE
+    `programmeSport` ADD CONSTRAINT `programmesport_sportid_foreign` FOREIGN KEY(`sportid`) REFERENCES `sport`(`id`);
