@@ -47,6 +47,7 @@ class AuthController extends BaseController
     public function login()
     {
         $model = new User();
+        
 
         $email = $this->request->getPost('email');
         $mdp   = $this->request->getPost('mdp');
