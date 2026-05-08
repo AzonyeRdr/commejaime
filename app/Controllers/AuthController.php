@@ -19,33 +19,30 @@ class AuthController extends BaseController
 
         $roleUser = $modelRole->find(3);
 
-        $email = $this->request->getPost('email');
-        $mdp = $this->request->getPost('mdp');
-
         $newUser = [
-            'email' => $email,
-            'mdp' => $mdp,
+            'email' => $this->request->getPost('email'),
+            'mdp' => $this->request->getPost('mdp'),
             'roleId' => $roleUser['id'] ?? 3,
             'montant' => 0,
         ];
 
-        $errors = [];
+        if (!$modelUser->insert($newUser)) {
 
-        if (isset($newUser)) {
-            $modelUser->insert($newUser);
-            $errors = $modelUser->errors();
+            return redirect()
+                ->back()
+                ->with('errors', $modelUser->errors())
+                ->withInput();
         }
 
-        if ($errors !== []) {
-            return redirect()->to(site_url('/'))->with('errors', $errors);
-        } else {
-            session()->set('user', [
-                'id' => $modelUser->getInsertID(),
-                'email' => $newUser['email'],
-                'roleId' => $newUser['roleId'],
-                'montant' => $newUser['montant'],
-            ]);
-            return redirect()->to(site_url('/'))->with('success', 'Votre inscription a réussi.');
-        }
+        session()->set('user', [
+            'id' => $modelUser->getInsertID(),
+            'email' => $newUser['email'],
+            'roleId' => $newUser['roleId'],
+            'montant' => $newUser['montant'],
+        ]);
+
+        return redirect()
+            ->to(site_url('/'))
+            ->with('success', 'Votre inscription a réussi.');
     }
 }
