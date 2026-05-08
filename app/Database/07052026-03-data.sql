@@ -4,7 +4,7 @@ INSERT INTO
     `user` (email, mdp, `roleId`)
 VALUES (
         'admin@gmail.com',
-        'admin123',
+        '$2y$10$XB/9gQ67JkEUZGzaFe0v3O8w6ROZJo/xspevQYThWZLK.V3JwlnOG',
         1
     );
 

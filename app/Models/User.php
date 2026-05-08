@@ -14,7 +14,7 @@ class User extends Model
     protected $allowedFields = ['email', 'mdp', 'roleId', 'montant'];
 
     protected $validationRules = [
-        'email' => 'required|valid_email|is_unique[users.email]',
+        'email' => 'required|valid_email|is_unique[user.email]',
         'mdp' => 'required|min_length[8]',
         'roleId' => 'required',
         'montant' => 'greater_than[-1]',

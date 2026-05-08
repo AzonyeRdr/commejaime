@@ -21,7 +21,7 @@ class AuthController extends BaseController
 
         $newUser = [
             'email' => $this->request->getPost('email'),
-            'mdp' => $this->request->getPost('mdp'),
+            'mdp' => password_hash($this->request->getPost('mdp'), PASSWORD_DEFAULT),
             'roleId' => $roleUser['id'] ?? 3,
             'montant' => 0,
         ];
@@ -34,15 +34,41 @@ class AuthController extends BaseController
                 ->withInput();
         }
 
-        session()->set('user', [
-            'id' => $modelUser->getInsertID(),
-            'email' => $newUser['email'],
-            'roleId' => $newUser['roleId'],
-            'montant' => $newUser['montant'],
-        ]);
-
         return redirect()
             ->to(site_url('/'))
             ->with('success', 'Votre inscription a réussi.');
+    }
+
+    public function loginForm()
+    {
+        return view('auth/login');
+    }
+
+    public function login()
+    {
+        $model = new User();
+
+        $email = $this->request->getPost('email');
+        $mdp   = $this->request->getPost('mdp');
+
+        $user = $model->where('email', $email)->first();
+
+        if (!$user || !password_verify($mdp, $user['mdp'])) {
+
+            return redirect()
+                ->back()
+                ->with('error', 'Email ou mot de passe incorrect')
+                ->withInput();
+        }
+
+        session()->set('user', [
+            'id'      => $user['id'],
+            'email'   => $user['email'],
+            'roleId'  => $user['roleId'],
+            'montant' => $user['montant'],
+        ]);
+
+        return redirect()->to(site_url('/index'))
+            ->with('success', "Vous êtes connecté en tant que {$user['email']}");
     }
 }
