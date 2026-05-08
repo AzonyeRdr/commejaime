@@ -1,5 +1,5 @@
 -- Active: 1770031521814@@127.0.0.1@3306@commejaime
-CREATE TABLE `user` (
+CREATE TABLE `user`(
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `email` TEXT NOT NULL,
     `mdp` TEXT NOT NULL,
@@ -114,6 +114,15 @@ CREATE TABLE `inscriptionProgramme` (
     Foreign Key (userId) REFERENCES `user` (id),
     Foreign Key (programmeId) REFERENCES programme (id)
 );
+CREATE table infoUser(
+    id int auto_increment primary key,
+    userId int unsigned not null,
+    prenom text not null,
+    age int not null,
+    poids double not null,
+    taille double not null,
+    Foreign Key (userId) REFERENCES `user`(id)
+)
 
 ALTER TABLE `user`
 ADD CONSTRAINT `unique_user_email` UNIQUE (`email`);
