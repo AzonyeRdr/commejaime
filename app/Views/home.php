@@ -5,7 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
 </head>
+<?php $success = session()->getFlashdata('success') ?? '' ?>
 <body>
-    <p>Bonjour</p>
+    <div class="success">
+        <p><?= $success ?></p>
+    </div>
+    Bonjour
 </body>
 </html>
