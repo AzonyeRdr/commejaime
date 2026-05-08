@@ -68,7 +68,7 @@ class AuthController extends BaseController
             'montant' => $user['montant'],
         ]);
 
-        return redirect()->to(site_url('/index'))
+        return redirect()->to(site_url('/admin'))
             ->with('success', "Vous êtes connecté en tant que {$user['email']}");
     }
 }
