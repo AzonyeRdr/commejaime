@@ -183,7 +183,9 @@ git merge dev
 ou :
 
 ```bash
+git stash
 git rebase dev
+git stash pop
 ```
 
 ---
