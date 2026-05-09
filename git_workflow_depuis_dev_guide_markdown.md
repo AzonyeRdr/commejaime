@@ -175,15 +175,18 @@ Puis :
 
 Depuis ta feature :
 
+Conseillé
 ```bash
 git checkout feature-login
-git merge dev
+git merge origin/dev
 ```
 
 ou :
 
 ```bash
+git stash
 git rebase dev
+git stash pop
 ```
 
 ---

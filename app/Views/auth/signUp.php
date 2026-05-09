@@ -40,7 +40,7 @@ $success = session()->getFlashdata('success') ?? '';
             <div class="btn">
                 <input type="submit" value="S'inscrire">
             </div>
-            <div class="redirect">
+            <div class="link">
                 <p>Avez-vous déjà un compte? <a href="/login">Se connecter</a></p>
             </div>
         </form>
