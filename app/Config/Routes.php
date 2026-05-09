@@ -18,13 +18,11 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
 
 //Routes pour admin, (role=1)
 $routes->group('admin', ['filter' => 'role:1'], function ($routes) {
-    $routes->get(
-        '/',
-        'AdminController::index'
-    );
+    $routes->get('/', 'AdminController::index');
+    $routes->get('codes', 'AdminController::liste');
+    $routes->get('valider-code/(:num)', 'AdminController::validerCode/$1');
+    $routes->get('refuser-code/(:num)', 'AdminController::refuserCode/$1');
 });
 
 //Routes pour gold, (role=2)
-$routes->group('', ['filter' => 'role:2'], function ($routes) {
-
-});
+$routes->group('', ['filter' => 'role:2'], function ($routes) {});

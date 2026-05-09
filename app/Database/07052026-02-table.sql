@@ -1,5 +1,5 @@
--- Active: 1741104595338@@127.0.0.1@3306@commejaime
-CREATE TABLE `user`(
+-- Active: 1770031521814@@127.0.0.1@3306@commejaime
+CREATE TABLE `user` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `email` TEXT NOT NULL,
     `mdp` TEXT NOT NULL,
@@ -43,7 +43,8 @@ CREATE TABLE `sport` (
     `exercices` TEXT NOT NULL
 );
 
-CREATE or replace TABLE `programmeSport` (
+CREATE
+TABLE `programmeSport` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `programmeId` INT UNSIGNED NOT NULL,
     `sportId` INT UNSIGNED NOT NULL,
@@ -69,11 +70,15 @@ CREATE TABLE `avantage` (
     `reduction` DECIMAL(8, 2) NOT NULL
 );
 
-CREATE or REPLACE TABLE `code` (
+CREATE
+or
+REPLACE
+TABLE `code` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `lib` TEXT NOT NULL,
     `status` BOOLEAN NOT NULL,
-    `userId` INT UNSIGNED NOT NULL
+    `userId` INT UNSIGNED NOT NULL,
+    `montant` DECIMAL(8, 2) NOT NULL DEFAULT 0
 );
 
 ALTER TABLE `ingredientRegime`
@@ -114,14 +119,15 @@ CREATE TABLE `inscriptionProgramme` (
     Foreign Key (userId) REFERENCES `user` (id),
     Foreign Key (programmeId) REFERENCES programme (id)
 );
-CREATE table infoUser(
+
+CREATE table infoUser (
     id int auto_increment primary key,
     userId int unsigned not null,
     prenom text not null,
     age int not null,
     poids double not null,
     taille double not null,
-    Foreign Key (userId) REFERENCES `user`(id)
+    Foreign Key (userId) REFERENCES `user` (id)
 )
 
 ALTER TABLE `user`

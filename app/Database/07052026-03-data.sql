@@ -10,7 +10,8 @@ VALUES (
 
 INSERT INTO avantage (`roleId`, reduction) VALUES (2, 15);
 
-INSERT INTO `code` (lib, `status`, userid) VALUES ('hd7t83', FALSE, 1);
+INSERT INTO `code` (lib, `status`, userid, montant) VALUES ('hd7t83', FALSE, 1,150000);
+INSERT INTO `code` (lib, `status`, userid, montant) VALUES ('d4d133', FALSE, 1,120000);
 
 INSERT INTO
     objectif (lib)
