@@ -1,4 +1,4 @@
--- Active: 1770031521814@@127.0.0.1@3306@commejaime
+-- Active: 1741104595338@@127.0.0.1@3306@commejaime
 CREATE TABLE `user` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `email` TEXT NOT NULL,

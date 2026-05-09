@@ -8,6 +8,8 @@ VALUES (
         1
     );
 
+--mdp admin : admin123
+
 INSERT INTO avantage (`roleId`, reduction) VALUES (2, 15);
 
 INSERT INTO `code` (lib, `status`, userid, montant) VALUES ('hd7t83', FALSE, 1,150000);
