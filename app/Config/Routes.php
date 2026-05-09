@@ -27,3 +27,9 @@ $routes->group('admin', ['filter' => 'role:1'], function ($routes) {
 
 //Routes pour gold, (role=2)
 $routes->group('', ['filter' => 'role:2'], function ($routes) {});
+
+$routes->get('/formInfoUser', 'InfoUserController::afficherFormulaireInfoUser');
+
+$routes->post('/insererInfoUser', 'InfoUserController::insererInfoUser');
+
+
