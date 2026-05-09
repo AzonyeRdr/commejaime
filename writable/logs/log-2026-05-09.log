@@ -1,0 +1,11 @@
+CRITICAL - 2026-05-09 10:31:14 --> ErrorException: Trying to access array offset on null
+[Method: GET, Route: admin]
+in APPPATH/Filters/RoleFilter.php on line 20.
+ 1 APPPATH/Filters/RoleFilter.php(20): CodeIgniter\Debug\Exceptions->errorHandler()
+ 2 SYSTEMPATH/Filters/Filters.php(278): App\Filters\RoleFilter->after()
+ 3 SYSTEMPATH/Filters/Filters.php(225): CodeIgniter\Filters\Filters->runAfter()
+ 4 SYSTEMPATH/CodeIgniter.php(515): CodeIgniter\Filters\Filters->run()
+ 5 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+ 6 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+ 8 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
