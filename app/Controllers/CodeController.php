@@ -14,7 +14,7 @@ class CodeController extends BaseController
         $codePost = $this->request->getPost('code');
         $codeModel = new Code();
 
-        $codeStr = $codeModel->where('lib', $codePost)->first();
+        $codeStr = $codeModel->where('lib', $codePost)->where('status', false)->first();
 
         if ($codeStr) {
             $userId = session()->get('user')['id'];
@@ -23,7 +23,7 @@ class CodeController extends BaseController
             return redirect()->back()->with('CodeSuccess', 'Votre demande a été envoyé à l\'administrateur.');
         }
 
-        return redirect()->back()->with('error', 'Code inexistant.')->withInput();
+        return redirect()->back()->with('CodeNoFound', 'Code inexistant.')->withInput();
     }
 
     public function liste()

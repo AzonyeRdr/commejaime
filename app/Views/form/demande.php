@@ -1,8 +1,7 @@
 <?php
-$error = '';
-if (session()->getFlashdata('error')) {
-    $error = session()->getFlashdata('error');
-}
+$error = session()->getFlashdata('CodeNoFound') ?? '';
+$success = session()->getFlashdata('CodeSuccess') ?? '';
+
 ?>
 <div class="form">
     <form action="envoyer-code-requete" method="post">
@@ -17,8 +16,11 @@ if (session()->getFlashdata('error')) {
                 <div class="error">
                     <?= $error ?>
                 </div>
-            <?php }
-            ?>
+            <?php } else if ($success != '') { ?>
+                <div class="success">
+                    <?= $success ?>
+                </div>
+            <?php } ?>
         </div>
         <div class="btn">
             <input type="submit" value="Envoyer une requête de code">
