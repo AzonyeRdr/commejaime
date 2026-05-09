@@ -15,7 +15,7 @@ class User extends Model
 
     protected $validationRules = [
         'email' => 'required|valid_email|is_unique[user.email]',
-        'mdp' => 'required|min_length[8]',
+        'mdp' => 'required',
         'roleId' => 'required',
         'montant' => 'greater_than[-1]',
     ];
@@ -30,7 +30,6 @@ class User extends Model
         'mdp' => 
         [
             'required' => 'Le mot de passe est obligatoire.',
-            'min_length' => 'Le mot de passe doit faire au moins 8 caractères.',
         ],
         'montant' => 
         [

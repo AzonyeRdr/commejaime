@@ -6,12 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin</title>
 </head>
-<?php $success = session()->getFlashdata('success') ?? '' ?>
 
 <body>
-    <div class="success">
-        <p><?= $success ?></p>
-    </div>
     <div class="content">
         <div class="link">
             <a href="<?= site_url('admin/codes') ?>">

@@ -17,7 +17,7 @@ class RoleFilter implements FilterInterface
         $user = $session->get('user');
 
         if (!$user || !in_array($user['roleId'], $arguments ?? [])) {
-            return redirect()->to(site_url('/index'))->with('success', "Vous êtes connecté en tant que {$user['email']}");
+            return redirect()->to(site_url('/index'));
         }
     }
 }

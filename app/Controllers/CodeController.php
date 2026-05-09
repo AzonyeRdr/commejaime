@@ -23,7 +23,7 @@ class CodeController extends BaseController
             return redirect()->back()->with('CodeSuccess', 'Votre demande a été envoyé à l\'administrateur.');
         }
 
-        return redirect()->back()->with('error', 'Code inexistant.');
+        return redirect()->back()->with('error', 'Code inexistant.')->withInput();
     }
 
     public function liste()

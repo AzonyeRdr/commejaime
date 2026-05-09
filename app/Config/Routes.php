@@ -14,6 +14,7 @@ $routes->post('/login', 'AuthController::login');
 //Route pour ceux qui sont connectés
 $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->get('/index', 'Home::index');
+    $routes->post('/envoyer-code-requete' , 'CodeController::demanderCode');
 });
 
 //Routes pour admin, (role=1)
