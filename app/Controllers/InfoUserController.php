@@ -27,5 +27,23 @@ class InfoUserController extends BaseController
     {
         return view('infoUser/formulaire');
     }
+    public function calculIMC($id){
+        $infoUserModel = new InfoUser();
+        $infoUser = $infoUserModel->find($id);
+        if (!$infoUser) {
+            return redirect()->to(site_url('/programme/liste'))->with('error', "Informations utilisateur non trouvées.");
+        }
+        $poids = $infoUser['poids'];
+        $taille = $infoUser['taille'] / 100; // Convertir la taille en mètres
+        $imc = $poids / ($taille * $taille);
+        return round($imc, 2);
+    }
+    public function calculPoidsIdeal($id){
+        $infoUserModel=new InfoUser();
+        $infoUser=$infoUserModel->find($id);
+        $taille=$infoUser['taille']/100;
+        $poidsIdeal=21.5*($taille*$taille);
+        return round($poidsIdeal,2);
+    }
 
 }
