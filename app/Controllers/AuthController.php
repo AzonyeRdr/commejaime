@@ -71,4 +71,9 @@ class AuthController extends BaseController
 
         return redirect()->to(site_url('/admin'));
     }
+
+    public function logout() {
+        session_destroy();
+        return redirect()->to(site_url('/login'));
+    }
 }

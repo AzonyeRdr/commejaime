@@ -14,6 +14,7 @@ $routes->post('/login', 'AuthController::login');
 //Route pour ceux qui sont connectés
 $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->get('/index', 'Home::index');
+    $routes->get('/logout' , 'AuthController::logout');
     $routes->post('/envoyer-code-requete', 'CodeController::demanderCode');
     $routes->post('/inserer-Info-User', 'InfoUserController::insererInfoUser');
     $routes->get('/program', 'ProgrammeController::index');
