@@ -13,6 +13,10 @@
     <div class="demande-form">
         <?php include __DIR__ . '/form/demande.php'; ?>
     </div>
+
+    <div class="info-form">
+        <?php include __DIR__ . '/form/infoUser.php'; ?>
+    </div>
 </body>
 
 </html>

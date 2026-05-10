@@ -14,7 +14,8 @@ $routes->post('/login', 'AuthController::login');
 //Route pour ceux qui sont connectés
 $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->get('/index', 'Home::index');
-    $routes->post('/envoyer-code-requete' , 'CodeController::demanderCode');
+    $routes->post('/envoyer-code-requete', 'CodeController::demanderCode');
+    $routes->post('/inserer-Info-User', 'InfoUserController::insererInfoUser');
 });
 
 //Routes pour admin, (role=1)
@@ -27,9 +28,3 @@ $routes->group('admin', ['filter' => 'role:1'], function ($routes) {
 
 //Routes pour gold, (role=2)
 $routes->group('', ['filter' => 'role:2'], function ($routes) {});
-
-$routes->get('/formInfoUser', 'InfoUserController::afficherFormulaireInfoUser');
-
-$routes->post('/insererInfoUser', 'InfoUserController::insererInfoUser');
-
-

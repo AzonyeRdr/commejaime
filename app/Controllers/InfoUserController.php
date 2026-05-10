@@ -8,26 +8,32 @@ class InfoUserController extends BaseController
 {
     public function insererInfoUser()
     {
-
         $infoUserModel = new InfoUser();
-        if ($infoUserModel->find(session()->get('user')['id'] != null)) {
-            return redirect()->to(site_url('/programme/liste'));
-        }
+        $userSession = session()->get('user');
+        $userId = $userSession['id'] ?? null;
+
         $data = [
-            'userId' => session()->get('userId'),
+            'userId' => $userId,
             'prenom' => $this->request->getPost('prenom'),
             'age' => $this->request->getPost('age'),
             'poids' => $this->request->getPost('poids'),
             'taille' => $this->request->getPost('taille'),
         ];
-        $infoUserModel->insert($data);
-        return redirect()->to(site_url('/programme/liste'))->with('success', "Vos informations ont été enregistrées avec succès.");
+
+        if (!$infoUserModel->insert($data)) {
+            return redirect()->back()->withInput()->with('errors', $infoUserModel->errors());
+        }
+
+        return redirect()->back()->with('InfoSuccess', "Vos informations ont été enregistrées avec succès.");
     }
+
     public function afficherFormulaireInfoUser()
     {
-        return view('infoUser/formulaire');
+        return view('form/infoUser');
     }
-    public function calculIMC($id){
+
+    public function calculIMC($id = null)
+    {
         $infoUserModel = new InfoUser();
         $infoUser = $infoUserModel->find($id);
         if (!$infoUser) {
@@ -38,12 +44,12 @@ class InfoUserController extends BaseController
         $imc = $poids / ($taille * $taille);
         return round($imc, 2);
     }
-    public function calculPoidsIdeal($id){
-        $infoUserModel=new InfoUser();
-        $infoUser=$infoUserModel->find($id);
-        $taille=$infoUser['taille']/100;
-        $poidsIdeal=21.5*($taille*$taille);
-        return round($poidsIdeal,2);
+    public function calculPoidsIdeal($id = null)
+    {
+        $infoUserModel = new InfoUser();
+        $infoUser = $infoUserModel->find($id);
+        $taille = $infoUser['taille'] / 100;
+        $poidsIdeal = 21.5 * ($taille * $taille);
+        return round($poidsIdeal, 2);
     }
-
 }
