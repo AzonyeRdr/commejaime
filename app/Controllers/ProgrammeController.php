@@ -182,4 +182,29 @@ class ProgrammeController extends BaseController
             'planning' => $planning
         ]);
     }
+
+
+    public function stat()
+    {
+        $db = \Config\Database::connect();
+
+        $programmes = $db->table('programme p')
+            ->select('
+                p.id,
+                p.nom,
+                p.nombreJour,
+                p.poids,
+                o.lib as objectif,
+                COUNT(ip.id) as nbInscription
+            ')
+            ->join('objectif o', 'o.id = p.objId')
+            ->join('inscriptionProgramme ip', 'ip.programmeId = p.id', 'left')
+            ->groupBy('p.id')
+            ->get()
+            ->getResultArray();
+
+        return view('admin/programme', [
+            'programmes' => $programmes
+        ]);
+    }
 }

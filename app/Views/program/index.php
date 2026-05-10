@@ -84,7 +84,7 @@
 
                             <p class="text-muted mb-3">
                                 <i class="fas fa-weight"></i>
-                                <strong><?= number_format($programme['poids'], 2) ?></strong> kg à perdre/gagner
+                                <strong><?= number_format($programme['poids'], 2) ?></strong> kg
                             </p>
 
                             <div class="mb-3">

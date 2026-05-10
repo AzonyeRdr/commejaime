@@ -23,6 +23,7 @@
         <p><?= $success ?></p>
     </div>
 
+    <?php include __DIR__ . '/../include/navbarAdmin.php'; ?>
     <div class="list">
         <h3>Listes des codes non validés</h3>
         <div class="tab">

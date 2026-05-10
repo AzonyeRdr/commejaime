@@ -32,6 +32,8 @@ $routes->group('admin', ['filter' => 'role:1'], function ($routes) {
     $routes->get('codes', 'CodeController::liste');
     $routes->get('valider-code/(:num)', 'CodeController::validerCode/$1');
     $routes->get('refuser-code/(:num)', 'CodeController::refuserCode/$1');
+    $routes->get('users', 'UserController::index');
+    $routes->get('programs', 'ProgrammeController::stat');
 });
 
 //Routes pour gold, (role=2)

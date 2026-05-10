@@ -8,6 +8,7 @@
 </head>
 
 <body>
+    <?php include __DIR__ . '/../include/navbarAdmin.php'; ?>
     <div class="content">
         <div class="link">
             <a href="<?= site_url('admin/codes') ?>">
