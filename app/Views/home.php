@@ -8,7 +8,7 @@
 </head>
 
 <body>
-    <?php 
+    <?php
     include __DIR__ . '/include/navbar.php';
     ?>
     Bonjour
@@ -17,9 +17,11 @@
         <?php include __DIR__ . '/form/demande.php'; ?>
     </div>
 
-    <div class="info-form">
-        <?php include __DIR__ . '/form/infoUser.php'; ?>
-    </div>
+    <?php if (session()->get('user')['roleId'] != 2) {
+        include __DIR__ . '/form/gold.php';
+    }
+    ?>
+
 </body>
 
 </html>

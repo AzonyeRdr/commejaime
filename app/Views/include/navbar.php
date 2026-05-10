@@ -16,22 +16,21 @@
                             <i class="fas fa-list"></i> Programmes
                         </a>
                     </li>
-                    <!-- <li class="nav-item">
-                        <a class="nav-link" href="">
-                            <i class="fas fa-user-circle"></i> Profil
-                        </a>
-                    </li> -->
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= site_url('/wallet') ?>">
+                        <a class="nav-link" href="<?= site_url('/profil') ?>">
                             <i class="fas fa-wallet"></i>
-                            Portefeuille
+                            Profil
                         </a>
                     </li>
                     <?php if (session()->get('user')['roleId'] != 2): ?>
                         <li class="nav-item">
                             <a class="nav-link text-warning" href="<?= site_url('/devenir-gold') ?>">
-                                <i class="fas fa-crown"></i> GOLD
+                                <i class="fas fa-crown"></i>Souscrire à GOLD
                             </a>
+                        </li>
+                    <?php else : ?>
+                        <li class="nav-item">
+                                <i class="fas fa-crown"></i> GOLD
                         </li>
                     <?php endif; ?>
                     <li class="nav-item">

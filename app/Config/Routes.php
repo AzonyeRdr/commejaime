@@ -14,13 +14,16 @@ $routes->post('/login', 'AuthController::login');
 //Route pour ceux qui sont connectés
 $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->get('/index', 'Home::index');
-    $routes->get('/logout' , 'AuthController::logout');
+    $routes->get('/logout', 'AuthController::logout');
     $routes->post('/envoyer-code-requete', 'CodeController::demanderCode');
     $routes->post('/inserer-Info-User', 'InfoUserController::insererInfoUser');
     $routes->get('/program', 'ProgrammeController::index');
-    $routes->post('/program/acheter' , 'ProgrammeController::inscrire');
-    $routes->get('/program/detail/(:num)' , 'ProgrammeController::detail/$1');
-    $routes->get('/program/detail/regime/(:num)' , 'RegimeController::detail/$1');
+    $routes->post('/program/acheter', 'ProgrammeController::inscrire');
+    $routes->get('/program/detail/(:num)', 'ProgrammeController::detail/$1');
+    $routes->get('/program/detail/regime/(:num)', 'RegimeController::detail/$1');
+    $routes->get('/devenir-gold', 'GoldController::activate');
+    $routes->get('/profil', 'ProfilController::index');
+    $routes->post('/profil/charger', 'ProfilController::chargerCompte');
 });
 
 //Routes pour admin, (role=1)
