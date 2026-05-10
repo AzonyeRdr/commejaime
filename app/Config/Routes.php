@@ -16,6 +16,9 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->get('/index', 'Home::index');
     $routes->post('/envoyer-code-requete', 'CodeController::demanderCode');
     $routes->post('/inserer-Info-User', 'InfoUserController::insererInfoUser');
+    $routes->get('/program', 'ProgrammeController::index');
+    $routes->post('/program/acheter' , 'ProgrammeController::inscrire');
+    $routes->get('/program/detail/(:num)' , 'ProgrammeController::detail/$1');
 });
 
 //Routes pour admin, (role=1)

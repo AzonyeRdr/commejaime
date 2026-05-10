@@ -8,6 +8,9 @@
 </head>
 
 <body>
+    <?php 
+    include __DIR__ . '/include/navbar.php';
+    ?>
     Bonjour
 
     <div class="demande-form">
