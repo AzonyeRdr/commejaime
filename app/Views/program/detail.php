@@ -66,10 +66,12 @@
                                     <h6><i class="fas fa-utensils text-primary"></i> Régimes</h6>
                                     <ul class="list-group mb-3">
                                         <?php foreach ($dayPlan['regimes'] as $regime): ?>
-                                            <li class="list-group-item">
-                                                <i class="fas fa-check-circle text-success"></i>
-                                                Plat <?= $regime['regimeId'] ?>
-                                            </li>
+                                            <a href="/program/detail/regime/<?= $regime['regimeId'] ?>">
+                                                <li class="list-group-item">
+                                                    <i class="fas fa-check-circle text-success"></i>
+                                                    Plat <?= $regime['regimeId'] ?>
+                                                </li>
+                                            </a>
                                         <?php endforeach; ?>
                                     </ul>
 

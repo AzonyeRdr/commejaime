@@ -19,6 +19,7 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->get('/program', 'ProgrammeController::index');
     $routes->post('/program/acheter' , 'ProgrammeController::inscrire');
     $routes->get('/program/detail/(:num)' , 'ProgrammeController::detail/$1');
+    $routes->get('/program/detail/regime/(:num)' , 'RegimeController::detail/$1');
 });
 
 //Routes pour admin, (role=1)
