@@ -1,5 +1,5 @@
 <?php
-$success = session()->getFlashdata('InfoSuccess') ?? '';
+$success = (string) (session()->getFlashdata('InfoSuccess') ?? '');
 $errors = session()->getFlashdata('errors') ?? [];
 ?>
 <div class="form">
@@ -8,7 +8,7 @@ $errors = session()->getFlashdata('errors') ?? [];
 
         <?php if ($success != '') { ?>
             <div class="success">
-                <?= esc($success) ?>
+                <?= esc((string) $success) ?>
             </div>
         <?php } ?>
 
@@ -18,7 +18,7 @@ $errors = session()->getFlashdata('errors') ?? [];
                 <input type="text" name="prenom" id="prenom" value="<?= old('prenom') ?>">
             </div>
             <?php if (isset($errors['prenom'])) : ?>
-                <div class="error"><?= esc($errors['prenom']) ?></div>
+                <div class="error"><?= esc((string) ($errors['prenom'] ?? '')) ?></div>
             <?php endif ?>
         </div>
 
@@ -28,7 +28,7 @@ $errors = session()->getFlashdata('errors') ?? [];
                 <input type="number" name="age" id="age" value="<?= old('age') ?>">
             </div>
             <?php if (isset($errors['age'])) : ?>
-                <div class="error"><?= esc($errors['age']) ?></div>
+                <div class="error"><?= esc((string) ($errors['age'] ?? '')) ?></div>
             <?php endif ?>
         </div>
 
@@ -38,7 +38,7 @@ $errors = session()->getFlashdata('errors') ?? [];
                 <input type="number" step="0.1" name="poids" id="poids" value="<?= old('poids') ?>">
             </div>
             <?php if (isset($errors['poids'])) : ?>
-                <div class="error"><?= esc($errors['poids']) ?></div>
+                <div class="error"><?= esc((string) ($errors['poids'] ?? '')) ?></div>
             <?php endif ?>
         </div>
 
@@ -48,7 +48,7 @@ $errors = session()->getFlashdata('errors') ?? [];
                 <input type="number" step="0.1" name="taille" id="taille" value="<?= old('taille') ?>">
             </div>
             <?php if (isset($errors['taille'])) : ?>
-                <div class="error"><?= esc($errors['taille']) ?></div>
+                <div class="error"><?= esc((string) ($errors['taille'] ?? '')) ?></div>
             <?php endif ?>
         </div>
 

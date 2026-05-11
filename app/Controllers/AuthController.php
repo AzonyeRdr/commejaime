@@ -19,6 +19,15 @@ class AuthController extends BaseController
 
         $roleUser = $modelRole->find(3);
 
+        $rules = [
+            'email' => 'required|valid_email|is_unique[user.email]',
+            'mdp' => 'required|min_length[6]',
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->with('errors', $this->validator->getErrors())->withInput();
+        }
+
         $newUser = [
             'email' => $this->request->getPost('email'),
             'mdp' => password_hash($this->request->getPost('mdp'), PASSWORD_DEFAULT),
@@ -69,7 +78,11 @@ class AuthController extends BaseController
             'montant' => $user['montant'],
         ]);
 
-        return redirect()->to(site_url('/admin'));
+        if ((int) $user['roleId'] === 1) {
+            return redirect()->to(site_url('/admin'));
+        }
+
+        return redirect()->to(site_url('/index'));
     }
 
     public function logout() {

@@ -4,47 +4,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign up</title>
+    <title>Inscription</title>
+    <link rel="stylesheet" href="<?= base_url('assets/css/app.css') ?>">
 </head>
 <?php
 $errors = session()->getFlashdata('errors') ?? [];
-$success = session()->getFlashdata('success') ?? '';
+$success = (string) (session()->getFlashdata('success') ?? '');
 ?>
 
 <body>
-    <?php if ($success !== '') { ?>
-        <div class="succes">
-            <?= $success ?>
-        </div>
-    <?php } ?>
-    <div class="auth-form">
-        <form action="/" method="post">
+    <div class="auth-shell signup-page">
+        <div class="auth-card">
+            <div class="badge-premium">CommeJaime</div>
+            <h1 class="auth-title">Créer un compte</h1>
+            <p class="auth-subtitle">Inscription rapide pour accéder à l’application nutrition et sport.</p>
+
+            <?php if ($success !== '') { ?>
+                <div class="success">
+                    <?= esc((string) $success) ?>
+                </div>
+            <?php } ?>
+
+            <form action="<?= site_url('/') ?>" method="post" class="auth-grid">
             <?= csrf_field() ?>
-            <div class="champ">
                 <div class="champ-item">
                     <label for="email">Email</label>
-                    <input type="email" name="email" id="email" placeholder="user@gmail.com" value="<?= old('email') ?>">
+                    <input type="email" name="email" id="email" placeholder="user@gmail.com" value="<?= old('email') ?>" required>
+                    <div class="error"><?= $errors['email'] ?? '' ?></div>
                 </div>
-                <div class="error">
-                    <?= $errors['email'] ?? '' ?>
-                </div>
-                
+
                 <div class="champ-item">
                     <label for="mdp">Mot de passe</label>
-                    <input type="password" name="mdp" id="mdp" value="<?php old('mdp') ?>">
+                    <div class="password-field">
+                        <input type="password" name="mdp" id="mdp" required>
+                        <button type="button" class="password-toggle" data-target="mdp">Show</button>
+                    </div>
+                    <div class="error"><?= $errors['mdp'] ?? '' ?></div>
                 </div>
-                <div class="error">
-                    <?= $errors['mdp'] ?? '' ?>
+
+                <div>
+                    <input type="submit" value="S'inscrire">
                 </div>
-            </div>
-            <div class="btn">
-                <input type="submit" value="S'inscrire">
-            </div>
-            <div class="link">
-                <p>Avez-vous déjà un compte? <a href="/login">Se connecter</a></p>
-            </div>
-        </form>
+                <div class="small-muted">
+                    Déjà un compte ? <a href="<?= site_url('/login') ?>">Se connecter</a>
+                </div>
+            </form>
+        </div>
     </div>
+
+    <script>
+        document.querySelectorAll('.password-toggle').forEach(function(button) {
+            button.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-target');
+                const field = document.getElementById(targetId);
+
+                if (!field) {
+                    return;
+                }
+
+                const isHidden = field.getAttribute('type') === 'password';
+                field.setAttribute('type', isHidden ? 'text' : 'password');
+                this.textContent = isHidden ? 'Hide' : 'Show';
+            });
+        });
+    </script>
 </body>
 
 </html>

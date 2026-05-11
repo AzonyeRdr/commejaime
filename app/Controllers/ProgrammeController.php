@@ -10,35 +10,79 @@ use App\Models\User;
 use App\Models\InscriptionProgramme;
 use App\Models\ProgrammeSport;
 use App\Models\InfoUser;
-use App\Controllers\InfoUserController;
+
 class ProgrammeController extends BaseController
 {
-    public function programmeSuggereIMC($id){
-        $infoUserModel=new InfoUser();
-        $userInfo=$infoUserModel->find($id);
-        $poids = $userInfo['poids'];
-        $infoUserController=new InfoUserController();
-        $poidsIdeal=$infoUserController->calculPoidsIdeal($id);
-        $variationPoids = $poids - $poidsIdeal;
-        if($variationPoids<0){
+    public function programmeSuggereIMC($id)
+    {
+        $infoUserModel = new \App\Models\InfoUser();
+        $userInfo = $infoUserModel->find($id);
+
+        if (!$userInfo) {
             return 1;
         }
-        else if($variationPoids>0){
+
+        $poids = (float) $userInfo['poids'];
+        $taille = (float) $userInfo['taille'] / 100;
+        $poidsIdeal = 21.5 * ($taille * $taille);
+        $variationPoids = $poids - $poidsIdeal;
+
+        if ($variationPoids < 0) {
+            return 1;
+        }
+
+        if ($variationPoids > 0) {
             return 2;
         }
 
+        return 1;
     }
+
     public function index()
     {
         $user = session()->get('user');
+        $modelInfoUser = new \App\Models\InfoUser();
+        $userInfo = $modelInfoUser->where('userId', $user['id'])->first();
 
-        $modelProgramme = new Programme();
-        $modelObjectif = new Objectif();
-        $modelProgrammeRegime = new ProgrammeRegime();
-        $modelIngredientRegime = new IngredientRegime();
+        if (!$userInfo) {
+            return redirect()->to(site_url('/infoUser/afficherFormulaire'))->with('error', 'Vous devez remplir votre formulaire d\'informations personnelles avant d\'accéder aux programmes');
+        }
 
-        $programmes = $modelProgramme->findAll();
+        return $this->renderProgrammes(null, false);
+    }
+
+    public function programmesSuggereesIMC()
+    {
+        $user = session()->get('user');
+        $modelInfoUser = new \App\Models\InfoUser();
+        $userInfo = $modelInfoUser->where('userId', $user['id'])->first();
+
+        if (!$userInfo) {
+            return redirect()->to(site_url('/infoUser/afficherFormulaire'))->with('error', 'Veuillez remplir vos informations personnelles avant de consulter les programmes suggérés.');
+        }
+
+        $objectifId = $this->programmeSuggereIMC($userInfo['id']);
+
+        return $this->renderProgrammes($objectifId, true);
+    }
+
+    private function renderProgrammes(?int $objectifId = null, bool $suggestedOnly = false)
+    {
+        $user = session()->get('user');
+
+        $modelProgramme = new \App\Models\Programme();
+        $modelObjectif = new \App\Models\Objectif();
+        $modelProgrammeRegime = new \App\Models\ProgrammeRegime();
+        $modelIngredientRegime = new \App\Models\IngredientRegime();
+
         $objectifs = $modelObjectif->findAll();
+        $programmesQuery = $modelProgramme;
+
+        if ($suggestedOnly && $objectifId !== null) {
+            $programmesQuery = $programmesQuery->where('objId', $objectifId);
+        }
+
+        $programmes = $programmesQuery->findAll();
 
         $vIngredientRegimes = $modelIngredientRegime->findAll();
         $prixParRegime = [];
@@ -60,17 +104,30 @@ class ProgrammeController extends BaseController
                     $prixTotal += $prixParRegime[$pr['regimeId']] ?? 0;
                 }
             }
+
             $programme['prix'] = $prixTotal;
 
             if ($user['roleId'] == 2) {
                 $programme['prix'] = floor($programme['prix'] * 0.85);
             }
         }
+        unset($programme);
+
+        $objectifLib = '';
+        if ($objectifId === 1) {
+            $objectifLib = 'Perte de poids';
+        } elseif ($objectifId === 2) {
+            $objectifLib = 'Prise de masse';
+        } elseif ($objectifId === 3) {
+            $objectifLib = 'Atteindre mon IMC idéal';
+        }
 
         return view('program/index', [
             'programmes' => $programmes,
             'objectifs' => $objectifs,
-            'isGold' => $user['roleId'] == 2
+            'isGold' => $user['roleId'] == 2,
+            'estSuggereIMC' => $suggestedOnly,
+            'objectifSuggerE' => $objectifLib,
         ]);
     }
 
@@ -78,11 +135,11 @@ class ProgrammeController extends BaseController
     {
         $programmeId = $this->request->getPost('programmeId');
 
-        $modelProgramme = new Programme();
-        $modelUser = new User();
-        $modelInscription = new InscriptionProgramme();
-        $modelProgrammeRegime = new ProgrammeRegime();
-        $modelIngredientRegime = new IngredientRegime();
+        $modelProgramme = new \App\Models\Programme();
+        $modelUser = new \App\Models\User();
+        $modelInscription = new \App\Models\InscriptionProgramme();
+        $modelProgrammeRegime = new \App\Models\ProgrammeRegime();
+        $modelIngredientRegime = new \App\Models\IngredientRegime();
 
         $programme = $modelProgramme->find($programmeId);
         if (!$programme) {
@@ -93,6 +150,15 @@ class ProgrammeController extends BaseController
         }
 
         $user = session()->get('user');
+        $modelInfoUser = new InfoUser();
+        $userInfo = $modelInfoUser->where('userId', $user['id'])->first();
+
+        if (!$userInfo) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Veuillez remplir votre formulaire d\'informations personnelles avant de vous inscrire à un programme'
+            ]);
+        }
 
         $vIngredientRegimes = $modelIngredientRegime->findAll();
         $prixParRegime = [];
@@ -159,27 +225,47 @@ class ProgrammeController extends BaseController
 
     public function detail($id = null)
     {
-
         $user = session()->get('user');
-        $modelInscription = new InscriptionProgramme();
+        $modelInscription = new \App\Models\InscriptionProgramme();
+
+        $modelProgramme = new \App\Models\Programme();
+        $modelProgrammeRegime = new \App\Models\ProgrammeRegime();
+        $modelProgrammeSport = new \App\Models\ProgrammeSport();
+        $modelIngredientRegime = new \App\Models\IngredientRegime();
+        $modelObjectif = new \App\Models\Objectif();
+
+        $programme = $modelProgramme->find($id);
+        if (!$programme) {
+            return redirect()->to(site_url('/program'))->with('error', 'Programme introuvable.');
+        }
 
         $inscriptionExistante = $modelInscription
             ->where('userId', $user['id'])
             ->where('programmeId', $id)
             ->first();
 
-        if (!$inscriptionExistante) {
-            return redirect()->back()->with('NonInscrit', 'Vous devez vous inscrire pour accéder à ce programme');
-        }
-
-        $modelProgramme = new Programme();
-        $modelProgrammeRegime = new ProgrammeRegime();
-        $modelProgrammeSport = new ProgrammeSport();
-
-        $programme = $modelProgramme->find($id);
-
         $regimes = $modelProgrammeRegime->where('programmeId', $id)->findAll();
         $sports = $modelProgrammeSport->where('programmeId', $id)->findAll();
+
+        $vIngredientRegimes = $modelIngredientRegime->findAll();
+        $prixParRegime = [];
+        foreach ($vIngredientRegimes as $vir) {
+            if (!isset($prixParRegime[$vir['regimeId']])) {
+                $prixParRegime[$vir['regimeId']] = 0;
+            }
+            $prixParRegime[$vir['regimeId']] += ($vir['pourcentage'] / 100) * $vir['poidsTotalPlat'] * $vir['prixG'];
+        }
+
+        $prixTotal = 0;
+        foreach ($modelProgrammeRegime->where('programmeId', $id)->findAll() as $pr) {
+            $prixTotal += $prixParRegime[$pr['regimeId']] ?? 0;
+        }
+
+        if ($user['roleId'] == 2) {
+            $prixTotal = floor($prixTotal * 0.85);
+        }
+
+        $programme['objectif'] = $modelObjectif->find($programme['objId']);
 
         $planning = [];
         $nombreJour = $programme['nombreJour'] ?? 7;
@@ -195,10 +281,12 @@ class ProgrammeController extends BaseController
 
         return view('program/detail', [
             'programme' => $programme,
-            'planning' => $planning
+            'planning' => $planning,
+            'isInscrit' => (bool) $inscriptionExistante,
+            'prixProgramme' => $prixTotal,
+            'isGold' => $user['roleId'] == 2,
         ]);
     }
-
 
     public function stat()
     {

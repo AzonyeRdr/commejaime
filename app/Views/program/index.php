@@ -5,22 +5,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Programme</title>
+    <link rel="stylesheet" href="<?= base_url('assets/css/app.css') ?>">
 </head>
 
 <body>
     <?php
     include __DIR__ . '/../include/navbar.php';
+    $objectifs = $objectifs ?? [];
+    $programmes = $programmes ?? [];
+    $estSuggereIMC = $estSuggereIMC ?? false;
+    $objectifSuggerE = $objectifSuggerE ?? '';
+        $user = session()->get('user') ?? [];
 
     ?>
-    <div class="container my-5">
-        <div class="row align-items-center mb-5">
-            <div class="col-lg-8">
-                <h1><i class="fas fa-list-check text-primary"></i> Nos Programmes</h1>
-                <p class="lead text-muted">Découvrez nos programmes adaptés à vos objectifs</p>
-            </div>
-
-            <div class="filtre">
-                <div class="col-lg-4">
+    <div class="program-shell">
+        <section class="hero program-hero">
+            <div class="hero-grid" style="grid-template-columns: 1.25fr .75fr; align-items:center;">
+                <div>
+                    <div class="badge-premium">Programmes personnalisés</div>
+                    <h1 class="hero-title" style="margin-top:.75rem;">Nos programmes</h1>
+                    <p class="lead">Découvrez des parcours adaptés à vos objectifs et à votre état de forme.</p>
+                </div>
+                <div class="glass-strip">
+                    <label class="form-label fw-bold">Rechercher</label>
                     <input
                         type="text"
                         class="form-control"
@@ -29,8 +36,7 @@
                 </div>
             </div>
 
-            <!-- Filtres -->
-            <div class="row mb-4">
+            <div class="row mb-4" style="margin-top:1.25rem;">
                 <div class="col-md-6">
                     <label class="form-label fw-bold">Filtrer par objectif</label>
                     <select class="form-select" id="filterObjectif">
@@ -49,10 +55,34 @@
                         <option value="prix">Prix croissant</option>
                         <option value="prix_desc">Prix décroissant</option>
                     </select>
+                    <button class="btn btn-warning mt-2 w-100" id="atteindreIMC" type="button">
+                        <i class="fas fa-bullseye"></i> Voir les programmes suggérés pour moi
+                    </button>
                 </div>
             </div>
-        </div>
 
+            <?php if ($estSuggereIMC): ?>
+                <div class="alert alert-info col-12 mb-4">
+                    <i class="fas fa-lightbulb"></i> <strong>Programmes suggérés selon votre IMC :</strong> <?= esc($objectifSuggerE) ?>
+                </div>
+            <?php endif; ?>
+        </section>
+
+
+        <div class="metrics" style="margin:1.25rem 0;">
+            <div class="stat-card">
+                <div class="small-muted">Programmes</div>
+                <div class="stat-value"><?= count($programmes) ?></div>
+            </div>
+            <div class="stat-card">
+                <div class="small-muted">Utilisateur</div>
+                <div class="stat-value"><?= ((int) ($user['roleId'] ?? 3) === 2) ? 'GOLD' : 'STANDARD' ?></div>
+            </div>
+            <div class="stat-card">
+                <div class="small-muted">Suggestion IMC</div>
+                <div class="stat-value"><?= $estSuggereIMC ? 'Actif' : 'Tous' ?></div>
+            </div>
+        </div>
 
         <!-- Grille de programmes -->
         <div class="programme-grid" id="programmesContainer">
@@ -69,7 +99,7 @@
                                     <h5 class="card-title mb-0"><?= $programme['nom'] ?></h5>
                                     <small class="text-light"><?= $programme['objectif']['lib'] ?? 'Objectif' ?></small>
                                 </div>
-                                <?php if (session()->get('user')['roleId'] == 2): ?>
+                                <?php if ((int) ($user['roleId'] ?? 3) == 2): ?>
                                     <span class="badge badge-gold">
                                         <i class="fas fa-crown"></i> GOLD
                                     </span>
@@ -77,42 +107,32 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <p class="text-muted mb-3">
-                                <i class="fas fa-calendar-days"></i>
-                                <strong><?= $programme['nombreJour'] ?></strong> jours
-                            </p>
+                            <div class="metrics" style="grid-template-columns:repeat(2,1fr); margin-bottom:1rem;">
+                                <div class="mini-card">
+                                    <div class="small-muted">Durée</div>
+                                    <div class="stat-value" style="font-size:1.2rem;"><?= esc((string) $programme['nombreJour']) ?> jours</div>
+                                </div>
+                                <div class="mini-card">
+                                    <div class="small-muted">Poids</div>
+                                    <div class="stat-value" style="font-size:1.2rem;"><?= number_format((float) $programme['poids'], 2) ?> kg</div>
+                                </div>
+                            </div>
 
-                            <p class="text-muted mb-3">
-                                <i class="fas fa-weight"></i>
-                                <strong><?= number_format($programme['poids'], 2) ?></strong> kg
-                            </p>
-
-                            <div class="mb-3">
-                                <div class="text-muted small">Prix:</div>
-                                <?php if (session()->get('user')['roleId'] == 2): ?>
-                                    <div class="text-muted small">
-                                        <s><?= number_format($programme['prix'] / 0.85, 0) ?> Ar</s>
-                                    </div>
-                                    <div class="text-success fw-bold fs-5">
-                                        <?= number_format($programme['prix'], 0) ?> Ar
-                                    </div>
+                            <div class="glass-strip">
+                                <div class="small-muted">Prix</div>
+                                <?php if ((int) ($user['roleId'] ?? 3) == 2): ?>
+                                    <div class="small-muted"><s><?= number_format($programme['prix'] / 0.85, 0) ?> Ar</s></div>
+                                    <div class="stat-value" style="color:var(--success); font-size:1.35rem;"><?= number_format($programme['prix'], 0) ?> Ar</div>
                                 <?php else: ?>
-                                    <div class="text-primary fw-bold fs-5">
-                                        <?= number_format($programme['prix'], 0) ?> Ar
-                                    </div>
+                                    <div class="stat-value" style="color:var(--primary); font-size:1.35rem;"><?= number_format($programme['prix'], 0) ?> Ar</div>
                                 <?php endif; ?>
                             </div>
                         </div>
                         <div class="btn-group">
                             <div class="btn detail">
                                 <a href="<?= site_url('program/detail/' . $programme['id']) ?>" class="btn detail">
-                                    <i class="fas fa-eye"></i> Détails
+                                    <i class="fas fa-eye"></i> Voir le détail
                                 </a>
-                                <?php if (session()->getFlashdata('NonInscrit')) { ?>
-                                    <div class="error">
-                                        <?= session()->getFlashdata('NonInscrit') ?>
-                                    </div>
-                                <?php } ?>
                                 <button
                                     type="button"
                                     class="btn acheter"
@@ -130,6 +150,13 @@
     </div>
 
     <script>
+        const atteindreIMCButton = document.getElementById('atteindreIMC');
+        if (atteindreIMCButton) {
+            atteindreIMCButton.addEventListener('click', function() {
+                window.location.href = '<?= site_url('/program/programmesSuggereesIMC') ?>';
+            });
+        }
+
         // Recherche
         document.getElementById('searchProgrammes').addEventListener('keyup', function() {
             filterProgrammes();

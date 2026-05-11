@@ -13,7 +13,7 @@ class GoldController extends BaseController
         $userData = $modelUser->find($user['id']);
 
         if ($userData['roleId'] == 2) {
-            redirect()->back();
+            return redirect()->to(site_url('/index'))->with('success', 'Votre abonnement GOLD est déjà actif.');
         }
 
         $modelUser->update($user['id'], ['roleId' => 2]);
@@ -21,6 +21,6 @@ class GoldController extends BaseController
         $user['roleId'] = 2;
         session()->set('user', $user);
 
-        return redirect()->back();
+        return redirect()->to(site_url('/index'))->with('success', 'Votre abonnement GOLD a été activé avec succès.');
     }
 }

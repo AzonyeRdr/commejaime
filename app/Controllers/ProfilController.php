@@ -20,6 +20,19 @@ class ProfilController extends BaseController
         $infoUserModel = new InfoUser();
         $infoUser = $infoUserModel->where('userId', $userId)->first();
 
+        $imc = null;
+        $poidsIdeal = null;
+        $variationPoids = null;
+
+        if ($infoUser) {
+            $tailleMetres = $infoUser['taille'] / 100;
+            if ($tailleMetres > 0) {
+                $imc = round($infoUser['poids'] / ($tailleMetres * $tailleMetres), 2);
+                $poidsIdeal = round(21.5 * ($tailleMetres * $tailleMetres), 2);
+                $variationPoids = round($infoUser['poids'] - $poidsIdeal, 2);
+            }
+        }
+
         $db = \Config\Database::connect();
 
         $program = $db->table('inscriptionProgramme ip')
@@ -32,7 +45,10 @@ class ProfilController extends BaseController
         return view('profil/index', [
             'infoUser' => $infoUser,
             'user' => $user,
-            'program' => $program
+            'program' => $program,
+            'imc' => $imc,
+            'poidsIdeal' => $poidsIdeal,
+            'variationPoids' => $variationPoids,
         ]);
     }
 

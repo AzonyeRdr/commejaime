@@ -21,6 +21,8 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->post('/program/acheter', 'ProgrammeController::inscrire');
     $routes->get('/program/detail/(:num)', 'ProgrammeController::detail/$1');
     $routes->get('/program/detail/regime/(:num)', 'RegimeController::detail/$1');
+        $routes->get('/program/programmesSuggereesIMC', 'ProgrammeController::programmesSuggereesIMC');
+        $routes->get('/infoUser/afficherFormulaire', 'InfoUserController::afficherFormulaireInfoUser');
     $routes->get('/devenir-gold', 'GoldController::activate');
     $routes->get('/profil', 'ProfilController::index');
     $routes->post('/profil/charger', 'ProfilController::chargerCompte');

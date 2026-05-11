@@ -29,7 +29,7 @@ class InfoUserController extends BaseController
 
     public function afficherFormulaireInfoUser()
     {
-        return view('form/infoUser');
+        return view('form/infoUserPage');
     }
 
     public function calculIMC($id = null)

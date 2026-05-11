@@ -4,7 +4,7 @@ $success = session()->getFlashdata('CodeSuccess') ?? '';
 
 ?>
 <div class="form">
-    <form action="envoyer-code-requete" method="post">
+    <form action="<?= site_url('/envoyer-code-requete') ?>" method="post">
         <?= csrf_field() ?>
         <div class="champ">
             <div class="champ-item">
@@ -14,11 +14,11 @@ $success = session()->getFlashdata('CodeSuccess') ?? '';
             <?php
             if ($error != '') { ?>
                 <div class="error">
-                    <?= $error ?>
+                    <?= esc((string) $error) ?>
                 </div>
             <?php } else if ($success != '') { ?>
                 <div class="success">
-                    <?= $success ?>
+                    <?= esc((string) $success) ?>
                 </div>
             <?php } ?>
         </div>
