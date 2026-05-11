@@ -28,11 +28,11 @@ class ProgrammeController extends BaseController
         $variationPoids = $poids - $poidsIdeal;
 
         if ($variationPoids < 0) {
-            return 1;
+            return 2;
         }
 
         if ($variationPoids > 0) {
-            return 2;
+            return 1;
         }
 
         return 1;
@@ -78,10 +78,7 @@ class ProgrammeController extends BaseController
         $objectifs = $modelObjectif->findAll();
         $programmesQuery = $modelProgramme;
 
-        if ($suggestedOnly && $objectifId !== null) {
-            $programmesQuery = $programmesQuery->where('objId', $objectifId);
-        }
-
+        // always fetch all programs so the frontend can filter
         $programmes = $programmesQuery->findAll();
 
         $vIngredientRegimes = $modelIngredientRegime->findAll();
@@ -128,6 +125,7 @@ class ProgrammeController extends BaseController
             'isGold' => $user['roleId'] == 2,
             'estSuggereIMC' => $suggestedOnly,
             'objectifSuggerE' => $objectifLib,
+            'suggestedObjectifId' => $objectifId,
         ]);
     }
 
@@ -279,12 +277,17 @@ class ProgrammeController extends BaseController
             ];
         }
 
+        $modelInfoUser = new \App\Models\InfoUser();
+        $userInfo = $modelInfoUser->where('userId', $user['id'])->first();
+        $userPoids = $userInfo ? (float)$userInfo['poids'] : 0.0;
+
         return view('program/detail', [
             'programme' => $programme,
             'planning' => $planning,
             'isInscrit' => (bool) $inscriptionExistante,
             'prixProgramme' => $prixTotal,
             'isGold' => $user['roleId'] == 2,
+            'userPoids' => $userPoids,
         ]);
     }
 

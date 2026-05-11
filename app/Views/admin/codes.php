@@ -13,7 +13,7 @@
     $success = '';
     $errorMessage = (string) (session()->getFlashdata('error') ?? '');
     if (session()->getFlashdata('ValidationSuccess')):
-            $success = (string) session()->getFlashdata('ValidationSuccess');
+        $success = (string) session()->getFlashdata('ValidationSuccess');
     elseif (session()->getFlashdata('RefusSuccess')):
         $success = (string) session()->getFlashdata('RefusSuccess');
     endif; ?>
@@ -30,93 +30,93 @@
         <div class="panel" style="margin-top:1.25rem;">
             <div class="section-title">Codes en validation</div>
             <div class="table-card">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Code</th>
-                        <th>Montant</th>
-                        <th>Utilisateur ID</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if (!empty($codeEnCoursDeValidation)): ?>
-                        <?php foreach ($codeEnCoursDeValidation as $code): ?>
-                            <tr>
-                                <td><?= esc((string) ($code['lib'] ?? $code->lib ?? '')) ?></td>
-                                <td><?= esc((string) ($code['montant'] ?? $code->montant ?? '')) ?> Ar</td>
-                                <td><?= esc((string) ($code['userId'] ?? $code->userId ?? '')) ?></td>
-                                <td>
-                                    <a href="<?= site_url('admin/valider-code/' . ($code['id'] ?? $code->id)) ?>">Valider</a>
-                                    <a href="<?= site_url('admin/refuser-code/' . ($code['id'] ?? $code->id)) ?>">Refuser</a>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                        <?php else: ?>
+                <table>
+                    <thead>
                         <tr>
-                            <td colspan="4">Aucun code en cours de validation.</td>
+                            <th>Code</th>
+                            <th>Montant</th>
+                            <th>Utilisateur ID</th>
+                            <th>Actions</th>
                         </tr>
-                    <?php endif; ?>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <?php if (!empty($codeEnCoursDeValidation)): ?>
+                            <?php foreach ($codeEnCoursDeValidation as $code): ?>
+                                <tr>
+                                    <td><?= esc((string) ($code['lib'] ?? $code->lib ?? '')) ?></td>
+                                    <td><?= esc((string) ($code['montant'] ?? $code->montant ?? '')) ?> Ar</td>
+                                    <td><?= esc((string) ($code['userId'] ?? $code->userId ?? '')) ?></td>
+                                    <td>
+                                        <a href="<?= site_url('admin/valider-code/' . ($code['id'] ?? $code->id)) ?>" class="btn btn-success" style="padding: 0.4rem 0.8rem; font-size: 0.85rem; margin-right: 0.5rem;">Valider</a>
+                                        <a href="<?= site_url('admin/refuser-code/' . ($code['id'] ?? $code->id)) ?>" class="btn btn-danger" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Refuser</a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="4">Aucun code en cours de validation.</td>
+                            </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
             </div>
         </div>
 
         <div class="panel" style="margin-top:1.25rem;">
             <div class="section-title">Codes disponibles</div>
             <div class="table-card">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Code</th>
-                        <th>Montant</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if (!empty($codeDisponible)): ?>
-                        <?php foreach ($codeDisponible as $code): ?>
-                            <tr>
-                                <td><?= esc((string) ($code['lib'] ?? $code->lib ?? '')) ?></td>
-                                <td><?= esc((string) ($code['montant'] ?? $code->montant ?? '')) ?> €</td>
-                            </tr>
-                        <?php endforeach; ?>
-                    <?php else: ?>
+                <table>
+                    <thead>
                         <tr>
-                            <td colspan="2">Aucun code disponible.</td>
+                            <th>Code</th>
+                            <th>Montant</th>
                         </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (!empty($codeDisponible)): ?>
+                            <?php foreach ($codeDisponible as $code): ?>
+                                <tr>
+                                    <td><?= esc((string) ($code['lib'] ?? $code->lib ?? '')) ?></td>
+                                    <td><?= esc((string) ($code['montant'] ?? $code->montant ?? '')) ?> €</td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="2">Aucun code disponible.</td>
+                            </tr>
                         <?php endif; ?>
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
             </div>
         </div>
 
         <div class="panel" style="margin-top:1.25rem;">
             <div class="section-title">Codes utilisés</div>
             <div class="table-card">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Code</th>
-                        <th>Montant</th>
-                        <th>Utilisateur ID</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if (!empty($codeUtilise)): ?>
-                        <?php foreach ($codeUtilise as $code): ?>
-                            <tr>
-                                <td><?= esc((string) ($code['lib'] ?? $code->lib ?? '')) ?></td>
-                                <td><?= esc((string) ($code['montant'] ?? $code->montant ?? '')) ?> €</td>
-                                <td><?= esc((string) ($code['userId'] ?? $code->userId ?? '')) ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    <?php else: ?>
+                <table>
+                    <thead>
                         <tr>
-                            <td colspan="3">Aucun code utilisé.</td>
+                            <th>Code</th>
+                            <th>Montant</th>
+                            <th>Utilisateur ID</th>
                         </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (!empty($codeUtilise)): ?>
+                            <?php foreach ($codeUtilise as $code): ?>
+                                <tr>
+                                    <td><?= esc((string) ($code['lib'] ?? $code->lib ?? '')) ?></td>
+                                    <td><?= esc((string) ($code['montant'] ?? $code->montant ?? '')) ?> €</td>
+                                    <td><?= esc((string) ($code['userId'] ?? $code->userId ?? '')) ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="3">Aucun code utilisé.</td>
+                            </tr>
                         <?php endif; ?>
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

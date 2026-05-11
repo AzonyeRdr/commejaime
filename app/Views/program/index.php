@@ -15,7 +15,7 @@
     $programmes = $programmes ?? [];
     $estSuggereIMC = $estSuggereIMC ?? false;
     $objectifSuggerE = $objectifSuggerE ?? '';
-        $user = session()->get('user') ?? [];
+    $user = session()->get('user') ?? [];
 
     ?>
     <div class="program-shell">
@@ -42,7 +42,7 @@
                     <select class="form-select" id="filterObjectif">
                         <option value="">Tous les objectifs</option>
                         <?php foreach ($objectifs as $objectif): ?>
-                            <option value="<?= $objectif['id'] ?>">
+                            <option value="<?= $objectif['id'] ?>" <?= ($estSuggereIMC && $objectif['id'] == 3) ? 'selected' : '' ?>>
                                 <?= $objectif['lib'] ?>
                             </option>
                         <?php endforeach; ?>
@@ -50,12 +50,12 @@
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold">Trier par</label>
-                    <select class="form-select" id="sortProgrammes">
+                    <select class="form-select mb-3" id="sortProgrammes">
                         <option value="nom">Nom</option>
                         <option value="prix">Prix croissant</option>
                         <option value="prix_desc">Prix décroissant</option>
                     </select>
-                    <button class="btn btn-warning mt-2 w-100" id="atteindreIMC" type="button">
+                    <button class="btn btn-warning w-100" id="atteindreIMC" type="button" style="padding: 0.9rem; font-size: 1.05rem; margin-top: 1.25rem;">
                         <i class="fas fa-bullseye"></i> Voir les programmes suggérés pour moi
                     </button>
                 </div>
@@ -128,20 +128,19 @@
                                 <?php endif; ?>
                             </div>
                         </div>
-                        <div class="btn-group">
-                            <div class="btn detail">
-                                <a href="<?= site_url('program/detail/' . $programme['id']) ?>" class="btn detail">
-                                    <i class="fas fa-eye"></i> Voir le détail
-                                </a>
-                                <button
-                                    type="button"
-                                    class="btn acheter"
-                                    data-id="<?= $programme['id'] ?>"
-                                    data-nom="<?= $programme['nom'] ?>"
-                                    data-prix="<?= $programme['prix'] ?>">
-                                    <i class="fas fa-shopping-cart"></i> Acheter
-                                </button>
-                            </div>
+                        <div class="d-flex" style="gap: 0.5rem; margin-top: 1rem;">
+                            <a href="<?= site_url('program/detail/' . $programme['id']) ?>" class="btn btn-outline flex-grow-1 text-center" style="font-size: 0.95rem;">
+                                <i class="fas fa-eye"></i> Détail
+                            </a>
+                            <button
+                                type="button"
+                                class="btn btn-primary flex-grow-1 acheter"
+                                data-id="<?= $programme['id'] ?>"
+                                data-nom="<?= $programme['nom'] ?>"
+                                data-prix="<?= $programme['prix'] ?>"
+                                style="font-size: 0.95rem;">
+                                <i class="fas fa-shopping-cart"></i> Acheter
+                            </button>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -164,7 +163,11 @@
 
         // Filtrage objectif
         document.getElementById('filterObjectif').addEventListener('change', function() {
-            filterProgrammes();
+            if (this.value === '3') {
+                window.location.href = '<?= site_url('/program/programmesSuggereesIMC') ?>';
+            } else {
+                filterProgrammes();
+            }
         });
 
         // Tri
@@ -176,17 +179,34 @@
             const searchText = document.getElementById('searchProgrammes').value.toLowerCase();
             const objectifFilter = document.getElementById('filterObjectif').value;
             const cards = document.querySelectorAll('.programme-card');
+            const suggestedId = '<?= isset($suggestedObjectifId) ? $suggestedObjectifId : '' ?>';
 
             cards.forEach(card => {
                 const nom = card.dataset.nom;
                 const objectif = card.dataset.objectif;
 
                 const searchMatch = nom.includes(searchText);
-                const objectifMatch = !objectifFilter || objectif === objectifFilter;
+
+                let objectifMatch = false;
+                if (!objectifFilter) {
+                    objectifMatch = true;
+                } else if (objectifFilter === '3') {
+                    // Si IMC idéal sélectionné, correspond à l'objectif suggéré stocké
+                    objectifMatch = (objectif === suggestedId);
+                } else {
+                    objectifMatch = (objectif === objectifFilter);
+                }
 
                 card.style.display = (searchMatch && objectifMatch) ? 'block' : 'none';
             });
         }
+
+        // Si on arrive sur la page "suggérée", on filtre directement 
+        <?php if ($estSuggereIMC): ?>
+            document.addEventListener('DOMContentLoaded', function() {
+                filterProgrammes();
+            });
+        <?php endif; ?>
 
         function sortProgrammes(sortBy) {
             const container = document.getElementById('programmesContainer');

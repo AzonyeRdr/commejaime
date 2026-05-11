@@ -26,11 +26,13 @@ $success = (string) (session()->getFlashdata('success') ?? '');
             <?php } ?>
 
             <form action="<?= site_url('/') ?>" method="post" class="auth-grid">
-            <?= csrf_field() ?>
+                <?= csrf_field() ?>
                 <div class="champ-item">
                     <label for="email">Email</label>
                     <input type="email" name="email" id="email" placeholder="user@gmail.com" value="<?= old('email') ?>" required>
-                    <div class="error"><?= $errors['email'] ?? '' ?></div>
+                    <?php if (isset($errors['email'])): ?>
+                        <div class="error"><?= $errors['email'] ?></div>
+                    <?php endif; ?>
                 </div>
 
                 <div class="champ-item">
@@ -39,7 +41,9 @@ $success = (string) (session()->getFlashdata('success') ?? '');
                         <input type="password" name="mdp" id="mdp" required>
                         <button type="button" class="password-toggle" data-target="mdp">Show</button>
                     </div>
-                    <div class="error"><?= $errors['mdp'] ?? '' ?></div>
+                    <?php if (isset($errors['mdp'])): ?>
+                        <div class="error"><?= $errors['mdp'] ?></div>
+                    <?php endif; ?>
                 </div>
 
                 <div>

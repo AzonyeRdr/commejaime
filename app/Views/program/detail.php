@@ -46,18 +46,102 @@
         <div class="panel">
             <h5>Évolution Prévue</h5>
             <p>Le programme prévoit une évolution progressive de la consommation de nourriture sur <?= esc((string) ($programme['nombreJour'] ?? '0')) ?> jours.</p>
+            <div style="margin-top: 1rem; position: relative; height: 300px; width: 100%;">
+                <canvas id="weightEvolutionChart"></canvas>
+            </div>
         </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const days = <?= (int) ($programme['nombreJour'] ?? 0) ?>;
+                const totalWeightVariation = <?= (float) ($programme['poids'] ?? 0) ?>;
+                const isPerte = <?= ((int) ($programme['objId'] ?? 0) === 1) ? 'true' : 'false' ?>;
+                const userWeight = <?= (float) ($userPoids ?? 0) ?>;
+
+                const labels = [];
+                const data = [];
+
+                for (let i = 0; i <= days; i++) {
+                    labels.push('Jour ' + i);
+                    let currentVariation = (totalWeightVariation / ((days > 0) ? days : 1)) * i;
+                    if (isPerte) {
+                        currentVariation = -currentVariation;
+                    }
+                    let currentWeight = userWeight + currentVariation;
+                    data.push(currentWeight.toFixed(2));
+                }
+
+                const ctx = document.getElementById('weightEvolutionChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Évolution du poids estimée (kg)',
+                            data: data,
+                            borderColor: '#e8b831',
+                            backgroundColor: 'rgba(232, 184, 49, 0.4)',
+                            fill: true,
+                            tension: 0.1,
+                            pointRadius: 4,
+                            pointBackgroundColor: '#fff',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'Poids Total (kg)',
+                                    color: '#8a94a6'
+                                },
+                                ticks: {
+                                    color: '#8a94a6'
+                                },
+                                grid: {
+                                    color: 'rgba(255,255,255,0.05)'
+                                }
+                            },
+                            x: {
+                                ticks: {
+                                    color: '#8a94a6'
+                                },
+                                grid: {
+                                    color: 'rgba(255,255,255,0.05)'
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: '#8a94a6'
+                                }
+                            }
+                        }
+                    }
+                });
+            });
+        </script>
 
         <div class="panel" style="margin-top:1.25rem;">
             <div class="section-title">Accès au programme</div>
-            <?php if ($isInscrit): ?>
-                <div class="success">Vous êtes déjà inscrit à ce programme.</div>
-            <?php else: ?>
-                <div class="alert alert-info">Prix du programme: <strong><?= number_format((float) $prixProgramme, 0) ?> Ar</strong><?= $isGold ? ' avec réduction GOLD appliquée' : '' ?></div>
-                <button type="button" class="btn btn-warning" id="acheterProgramme" data-id="<?= esc((string) ($programme['id'] ?? '')) ?>" data-prix="<?= esc((string) $prixProgramme) ?>">
-                    <i class="fas fa-cart-shopping"></i> Acheter ce programme
+            <div class="d-flex" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                <?php if ($isInscrit): ?>
+                    <div class="success flex-grow-1" style="margin: 0;">Vous êtes déjà inscrit à ce programme.</div>
+                <?php else: ?>
+                    <div class="alert alert-info flex-grow-1" style="margin: 0;">Prix du programme: <strong><?= number_format((float) $prixProgramme, 0) ?> Ar</strong><?= $isGold ? ' avec réduction GOLD appliquée' : '' ?></div>
+                    <button type="button" class="btn btn-primary" id="acheterProgramme" data-id="<?= esc((string) ($programme['id'] ?? '')) ?>" data-prix="<?= esc((string) $prixProgramme) ?>">
+                        <i class="fas fa-cart-shopping"></i> Acheter ce programme
+                    </button>
+                <?php endif; ?>
+                <button type="button" class="btn btn-outline" onclick="window.print()">
+                    <i class="fas fa-file-pdf"></i> Exporter en PDF
                 </button>
-            <?php endif; ?>
+            </div>
         </div>
 
         <div class="panel" style="margin-top:1.25rem;">
