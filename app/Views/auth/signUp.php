@@ -18,6 +18,10 @@ $success = (string) (session()->getFlashdata('success') ?? '');
             <div class="badge-premium">CommeJaime</div>
             <h1 class="auth-title">Créer un compte</h1>
             <p class="auth-subtitle">Inscription rapide pour accéder à l’application nutrition et sport.</p>
+            <p class="small-muted">
+                Compte de test : admin@gmail.com / admin123<br>
+                user@gmail.com / admin123
+            </p>
 
             <?php if ($success !== '') { ?>
                 <div class="success">

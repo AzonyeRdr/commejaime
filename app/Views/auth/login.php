@@ -18,6 +18,10 @@ $error = session()->getFlashdata('error') ?? '';
             <div class="badge-premium">CommeJaime</div>
             <h1 class="auth-title">Heureux de vous revoir</h1>
             <p class="auth-subtitle">Connectez-vous pour suivre vos programmes, votre portefeuille et votre évolution.</p>
+            <p class="small-muted">
+                Compte de test : admin@gmail.com / admin123<br>
+                user@gmail.com / admin123
+            </p>
 
             <?php if ($error !== ''): ?>
                 <div class="error"><?= esc((string) $error) ?></div>
