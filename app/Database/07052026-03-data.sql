@@ -6,14 +6,34 @@ VALUES (
         'admin@gmail.com',
         '$2y$12$y0BXJsdNekN6xWnasg.N.eLo77Sb6jQaVAhj5cVCFxsSMLgJUOuwy',
         1
+    ),
+    (
+        'user@gmail.com',
+        '$2y$12$y0BXJsdNekN6xWnasg.N.eLo77Sb6jQaVAhj5cVCFxsSMLgJUOuwy',
+        3
     );
 
 --mdp admin : admin123
 
 INSERT INTO avantage (`roleId`, reduction) VALUES (2, 15);
 
-INSERT INTO `code` (lib, `status`, userid, montant) VALUES ('hd7t83', FALSE, 1,150000);
-INSERT INTO `code` (lib, `status`, userid, montant) VALUES ('d4d133', FALSE, 1,120000);
+INSERT INTO
+    `code` (
+        lib,
+        `status`,
+        userid,
+        montant
+    )
+VALUES ('hd7t83', FALSE, 1, 150000);
+
+INSERT INTO
+    `code` (
+        lib,
+        `status`,
+        userid,
+        montant
+    )
+VALUES ('d4d133', FALSE, 1, 120000);
 
 INSERT INTO
     objectif (lib)
