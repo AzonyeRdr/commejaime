@@ -9,9 +9,25 @@ use App\Models\IngredientRegime;
 use App\Models\User;
 use App\Models\InscriptionProgramme;
 use App\Models\ProgrammeSport;
-
+use App\Models\InfoUser;
+use App\Controllers\InfoUserController;
 class ProgrammeController extends BaseController
 {
+    public function programmeSuggereIMC($id){
+        $infoUserModel=new InfoUser();
+        $userInfo=$infoUserModel->find($id);
+        $poids = $userInfo['poids'];
+        $infoUserController=new InfoUserController();
+        $poidsIdeal=$infoUserController->calculPoidsIdeal($id);
+        $variationPoids = $poids - $poidsIdeal;
+        if($variationPoids<0){
+            return 1;
+        }
+        else if($variationPoids>0){
+            return 2;
+        }
+
+    }
     public function index()
     {
         $user = session()->get('user');
